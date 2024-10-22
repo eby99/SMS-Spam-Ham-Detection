@@ -5,17 +5,25 @@ import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk.stem import PorterStemmer
+import os
 
-# Ensure necessary NLTK resources are downloaded
+# Ensure necessary NLTK resources are downloaded to a custom directory
+nltk_data_path = os.path.join(os.getcwd(), 'nltk_data')
+if not os.path.exists(nltk_data_path):
+    os.makedirs(nltk_data_path)
+
+nltk.data.path.append(nltk_data_path)
+
+# Download required NLTK resources if not available
 try:
     nltk.data.find('tokenizers/punkt')
 except LookupError:
-    nltk.download('punkt')
+    nltk.download('punkt', download_dir=nltk_data_path)
 
 try:
     nltk.data.find('corpora/stopwords')
 except LookupError:
-    nltk.download('stopwords')
+    nltk.download('stopwords', download_dir=nltk_data_path)
 
 # Initialize the Porter Stemmer
 port_stemmer = PorterStemmer()
@@ -63,3 +71,4 @@ if st.button('Predict'):
             st.header("Spam")
         else:
             st.header("Not Spam")
+
